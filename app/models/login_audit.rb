@@ -68,6 +68,15 @@ class LoginAudit < ActiveRecord::Base
     begin
       la.save!
       Rails.logger.info "LoginAudit: Saved LoginAudit for User:'#{login}', id: #{id}, Login succeed: #{success}"
+      
+      failCnt = User.count_by_sql(['select count(*) from login_audits where login = ? and success = 0 and created_on >= DATE_FORMAT(DATE_ADD(now(),INTERVAL -5 MINUTE),\'%Y-%m-%d %H:%i:%s\') and id > ( select max(id) from login_audits where login = ? and success = 1 )', login, login])
+      Rails.logger.info "failCnt: #{failCnt}"
+
+      if failCnt >= 5
+         Rails.logger.info "5hit"
+         updateCnt = User.where(login: login).update_all(status: 3)
+         Rails.logger.info "updateCnt: #{updateCnt}"
+      end
     rescue Exception => e
       Rails.logger.error "LoginAudit: Failed to save LoginAudit for User:'#{login}', id: #{id}, Login succeed: #{success}, Error: #{e.message}"
     end
