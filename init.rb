@@ -66,6 +66,7 @@ Redmine::Plugin.register :redmine_login_audit do
       :log_setting => 0,
       :recipients => [],
       :audit_rows_per_page => 50,
+      :audit_max_fail_cnt => -1,
       :audit_api => false
   },
            :partial => 'settings/login_audit'
