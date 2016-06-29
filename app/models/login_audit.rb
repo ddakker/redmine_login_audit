@@ -63,19 +63,25 @@ class LoginAudit < ActiveRecord::Base
         :method => request.request_method
     )
 
-    Rails.logger.info "LoginAudit Event: #{la.to_s}"
+    Rails.logger.info "-----LoginAudit Event: #{la.to_s}"
+    Rails.logger.info "----- asdf user: #{user}"
+
+    max_fail_cnt = Setting.plugin_redmine_login_audit[:audit_max_fail_cnt].to_i
+    Rails.logger.info "----- max_fail_cnt: #{max_fail_cnt}"
 
     begin
       la.save!
       Rails.logger.info "LoginAudit: Saved LoginAudit for User:'#{login}', id: #{id}, Login succeed: #{success}"
-      
-      failCnt = User.count_by_sql(['select count(*) from login_audits where login = ? and success = 0 and created_on >= DATE_FORMAT(DATE_ADD(now(),INTERVAL -5 MINUTE),\'%Y-%m-%d %H:%i:%s\') and id > ( select max(id) from login_audits where login = ? and success = 1 )', login, login])
-      Rails.logger.info "failCnt: #{failCnt}"
 
-      if failCnt >= 5
-         Rails.logger.info "5hit"
-         updateCnt = User.where(login: login).update_all(status: 3)
-         Rails.logger.info "updateCnt: #{updateCnt}"
+      if max_fail_cnt > -1
+        failCnt = User.count_by_sql(['select count(*) from login_audits where login = ? and success = 0 and created_on >= DATE_FORMAT(DATE_ADD(now(),INTERVAL -5 MINUTE),\'%Y-%m-%d %H:%i:%s\') and id > ( select max(id) from login_audits where login = ? and success = 1 )', login, login])
+        Rails.logger.info "failCnt: #{failCnt}"
+
+        if failCnt >= max_fail_cnt
+           Rails.logger.info "5hit"
+           updateCnt = User.where(login: login).update_all(status: 3)
+           Rails.logger.info "updateCnt: #{updateCnt}"
+        end
       end
     rescue Exception => e
       Rails.logger.error "LoginAudit: Failed to save LoginAudit for User:'#{login}', id: #{id}, Login succeed: #{success}, Error: #{e.message}"
