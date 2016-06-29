@@ -4,6 +4,7 @@ If you like this plugin, you're welcome to visit my blog: http://martin-denizet.
 
 ## 수정내역
  * 비밀번호 5회 오류 시 계정 잠금
+ * 횟수 관리자에서 수정 가능
 
 ## Features
 
