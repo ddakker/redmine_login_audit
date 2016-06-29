@@ -55,7 +55,7 @@ Redmine::Plugin.register :redmine_login_audit do
   author 'Martin DENIZET'
   description 'Login Audit logs login attempts. Can be configured to send emails, 비밀번호 5회 오류 시 잠금 기능 추가 by ddakker 2016.06.27.'
   version '0.3.1'
-  url 'https://github.com/martin-denizet/redmine_login_audit, edit 'https://github.com/ddakker/redmine_login_audit'
+  url 'https://github.com/martin-denizet/redmine_login_audit, edit: https://github.com/ddakker/redmine_login_audit'
   author_url 'http://martin-denizet.com'
 
   menu :admin_menu, :login_audit, {:controller => 'login_audit', :action => 'index'}, :caption => :label_la_admin
