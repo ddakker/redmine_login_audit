@@ -39,6 +39,8 @@ en:
       successes: Successes only
       failures: Failures only
       both: Failures and successes
+  label_la_max_fail_cnt: Max fail cnt
+  help_la_max_fail_cnt: up selectbox "failures and successes" selected
   label_la_audit_api: Audit API
   help_la_audit_api: When enabled, all API calls will be logged, respecting the "logging settings". <b>This will eventually generate large quantities of data!</b>
   message_la_logging_disabled: Logging is disabled, nothing is logged!
