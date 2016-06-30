@@ -11,6 +11,11 @@
   <em class="info"> <%= l(:help_la_logging_settings) %></em>
 </p>
 <p>
+  <label><%= l(:label_la_max_fail_cnt) %></label>
+  <%= text_field_tag 'settings[audit_max_fail_cnt]', @settings[:audit_max_fail_cnt] %>
+  <em class="info"><%= l(:help_la_max_fail_cnt).html_safe %></em>
+</p>
+<p>
   <label><%= l(:label_la_audit_api) %></label>
   <%= check_box_tag 'settings[audit_api]', 1, @settings[:audit_api] %>
   <em class="info"> <%= l(:help_la_audit_api).html_safe %></em>
@@ -105,5 +110,14 @@
     });
 
     removeLinks();
+
+    jQuery("#settings_log_setting").change(function() {
+      var val = jQuery("#settings_log_setting option:selected").val();
+      if (val == "3") {
+        jQuery("#settings_audit_max_fail_cnt").val("5").attr("readonly", false).css("background-color", "");
+      } else {
+        jQuery("#settings_audit_max_fail_cnt").val("-1").attr("readonly", true).css("background-color", "#e2e2e2");
+      }
+    });
   });
 </script>
